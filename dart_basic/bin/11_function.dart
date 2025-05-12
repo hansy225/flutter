@@ -1,6 +1,6 @@
 /*
    parameter(argment) : 순서와 갯수가 동일
-   optional parameter : 파라미터의 갯수가 미지수일 때
+   optional parameter : 순서가 맞아야 됨. 파라미터의 갯수가 미지수일 때
  */
 
 void main() {
