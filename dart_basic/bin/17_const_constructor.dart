@@ -26,11 +26,11 @@ class Idol {
       this.name = values[1];
 
   sayHello() {
-    print('안녕하세요 ${this.name} 입니다');
+    print('안녕하세요 $name 입니다.');
   }
 
   introduce() {
-    print('저희 멤버는 $members 입니다.');
+    print('저의 멤버는 $members 입니다.');
   }
 
 }
