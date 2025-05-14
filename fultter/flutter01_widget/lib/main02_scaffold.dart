@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 /*
     Scaffold() : 화면은 top, body, bottom 으로 나누어 줌
-    
+
     배치
      - Row() : 위젯들을 가로로 배치
      - Column() : 위젯들을 세로로 배치
@@ -32,9 +32,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: Text('예제'),),
-        body: Center(child: Text('본문 내용'),),
-        bottomNavigationBar: Row(
+        appBar: AppBar(),
+        body: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Icon(Icons.ac_unit),
