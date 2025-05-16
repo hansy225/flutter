@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-// 문 : dialog에서 이름을 넣으면 name배열에 이름 추가하기
-
+/*
+  * input
+    : TextField()는 저장되지 않음. 별도의 변수에 저장
+ */
 void main() {
   runApp(
       MaterialApp(
@@ -18,9 +20,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   var name = ['홍길동', '더조은', '빛나리'];
-  addName(inputName) {
+  var total = 3;
+
+  addFriend() {
     setState(() {
-      name.add(inputName);
+      total++;
     });
   }
 
@@ -33,7 +37,7 @@ class _MyAppState extends State<MyApp> {
             showDialog(
                 context: context,
                 builder: (context) {
-                  return CustomDialog(addName: addName);
+                  return CustomDialog(friendState : addFriend);
                 }
             );
           }
@@ -41,7 +45,7 @@ class _MyAppState extends State<MyApp> {
       appBar: AppBar(
         backgroundColor: Color(0xFFf3edf7),
         leading: Icon(Icons.list),
-        title: Text('주소록'),
+        title: Text(total.toString()),
         actions: [Icon(Icons.search), Icon(Icons.share)],
       ),
       body: ListView.builder(
@@ -51,7 +55,7 @@ class _MyAppState extends State<MyApp> {
             title: Text(name[i]),
           );
         },
-        itemCount: name.length,
+        itemCount: 3,
       ),
       bottomNavigationBar: CustomBottom(),
     );
@@ -59,9 +63,10 @@ class _MyAppState extends State<MyApp> {
 }
 
 class CustomDialog extends StatelessWidget {
-  CustomDialog({super.key, this.addName});
-  final addName;
-  var inputData = '';
+  CustomDialog({super.key, this.friendState});
+  final friendState;
+  var inputData = TextEditingController();
+  var inputData2 = '';
 
   @override
   Widget build(BuildContext context) {
@@ -71,11 +76,14 @@ class CustomDialog extends StatelessWidget {
         height: 300,
         child: Column(
           children: [
-            TextField(onChanged: (text){ inputData = text; },),
+            // 사용 시 (controller : 변수명) : controller는 입력값을 관리하는 역할
+            // TextField(controller: inputData),
+            TextField(onChanged: (text){ inputData2 = text; },),
             TextButton(
                 onPressed: (){
-                  addName(inputData);
-                  Navigator.pop(context);
+                  friendState();  // 함수 호출 시 괄호를 붙여줌
+                  print(inputData2);
+                  // Navigator.pop(context);
                 },
                 child: Text('완료')),
             TextButton(
@@ -89,7 +97,6 @@ class CustomDialog extends StatelessWidget {
     );
   }
 }
-
 
 class CustomBottom extends StatelessWidget {
   const CustomBottom({super.key});
