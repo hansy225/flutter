@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Color(0xFFf3edf7),
           title: Text('강남역'),
-          actions: [Icon(Icons.search,), Icon(Icons.list_sharp), Icon(Icons.add_location_alt_rounded)],  // 오른쪽
+          actions: [Icon(Icons.search,), Icon(Icons.menu), Icon(Icons.add_location_alt_rounded)],  // 오른쪽
         ),
         
         body: Container(
@@ -24,16 +24,16 @@ class MyApp extends StatelessWidget {
           child: Row(
             children: [
               Image.asset('assets/images/img.jpg'),
-              SizedBox(width: 10),
+              SizedBox(width: 15),
               SizedBox(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text('인형(한교동)',
+                    Text('한교동 인형',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 30),),
+                        fontSize: 28),),
                     Text('강남 , 10분전'),
                     Text('5,000원',
                       style: TextStyle(

@@ -14,9 +14,9 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Color(0xFFf3edf7),
           title: Text('강남역'),
-          actions: [Icon(Icons.search,), Icon(Icons.list_sharp), Icon(Icons.add_location_alt_rounded)],  // 오른쪽
+          actions: [Icon(Icons.search,), Icon(Icons.menu), Icon(Icons.add_location_alt_rounded)],  // 오른쪽
         ),
-        
+
         body: Container(
           width: 500, height: 200,
           padding: EdgeInsets.all(5),
@@ -24,33 +24,33 @@ class MyApp extends StatelessWidget {
           child: Row(
             children: [
               Image.asset('assets/images/img.jpg'),
-              SizedBox(width: 10),
-              SizedBox(
+              SizedBox(width: 15),
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  spacing: 9,
                   children: [
-                    Text('인형(한교동)',
+                    Text('한교동 인형',
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30),),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 28),),
                     Text('강남 , 10분전'),
                     Text('5,000원',
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20
                       ),
                     ),
-                    SizedBox(
-                      width: 150,
-                      child: Row(
+                    //SizedBox(
+                      //width: 150,
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Icon(Icons.favorite_border),
                           Text('4')
                         ],
                       ),
-                    )
                   ],
                 ),
               ),
