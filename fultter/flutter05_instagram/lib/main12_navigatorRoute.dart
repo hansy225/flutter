@@ -15,7 +15,6 @@ void main() {
           '/upload' : (context) => Upload(),
           '/detail' : (context) => Text('상세페이지')
         },
-        //home: const MyApp()
       )
   );
 }

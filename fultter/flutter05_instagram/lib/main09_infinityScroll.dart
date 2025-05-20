@@ -2,20 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter05_instagram/style.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter/rendering.dart';
+import 'package:flutter/rendering.dart';  // 스크롤에 관련된 함수 모음
+/*
+  * 무한 스크롤
+    스크롤이 바닥에 닿으면 데이터를 얻어와서 보여주기
 
-
+    1. import하기
+    2. 스크롤의 상태를 파악하기 위해 Home을 stateful로 변경
+ */
 void main() {
   runApp(
       MaterialApp(
-        theme: theme,
-        initialRoute: '/',
-        routes: {
-          '/' : (context) => MyApp(),
-          '/upload' : (context) => Upload(),
-          '/detail' : (context) => Text('상세페이지')
-        },
-        //home: const MyApp()
+          theme: theme,
+          home: const MyApp()
       )
   );
 }
@@ -49,12 +48,6 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  addData(item) {
-    setState(() {
-      feedItems.add(item);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,13 +56,12 @@ class _MyAppState extends State<MyApp> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/upload');
               },
               icon: Icon(Icons.add_box_outlined)
           )
         ],
       ),
-      body: [Home(feedItems : feedItems, addData : addData), Text('Shop Page')][tab],
+      body: [Home(feedItems : feedItems), Text('Shop Page')][tab],
       bottomNavigationBar: BottomNavigationBar(
           showSelectedLabels: false,
           showUnselectedLabels: false,
@@ -88,37 +80,30 @@ class _MyAppState extends State<MyApp> {
 }
 
 class Home extends StatefulWidget {
-  const Home({super.key, this.feedItems, this.addData});
+  const Home({super.key, this.feedItems});
   final feedItems;
-  final addData;
 
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
+  // 스크롤바의 위치를 기록해주는 함수
   var scroll = ScrollController();
 
   @override
   void initState() {
     super.initState();
+    // 스크롤 이벤트리스너를 한번 등록
     scroll.addListener((){
+      // print('스크롤의 위치 변함');
+      // print(scroll.position.pixels);  // 스크롤이 위에서 부터 얼마나 내려왔는지 높이
+      // print(scroll.position.maxScrollExtent);  // 스크롤바를 최대 내릴수 있는 높이
+      // print(scroll.position.userScrollDirection);   // 스크롤이 되는 방향
       if(scroll.position.pixels == scroll.position.maxScrollExtent) {
-        getMore();
+        print('더이상 스크롤될게 없습니다');
       }
-    });
-  }
-
-  getMore() async{
-    var result = await http.get(Uri.parse('https://jioneproferssor.store/flutter/data/data2.json'));
-    if(result.statusCode == 200) {
-      var result2 = jsonDecode(result.body);
-      for(var item in result2) {
-        widget.addData(item);
-      }
-    } else {
-      throw Exception('get server data 실패');
-    }
+    });  // addListener() : 리스너 스크롤될 때 마다 호출
   }
 
   @override
@@ -126,7 +111,7 @@ class _HomeState extends State<Home> {
     if(widget.feedItems.isNotEmpty) {
       return ListView.builder(
           controller: scroll,
-          itemCount: widget.feedItems.length,
+          itemCount: 3,
           itemBuilder: (c, i) {
             return Column(
               children: [
@@ -150,27 +135,5 @@ class _HomeState extends State<Home> {
     } else {
       return Center(child: CircularProgressIndicator());
     }
-  }
-}
-
-class Upload extends StatelessWidget {
-  const Upload({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: [
-          Text('이미지 업로드 화면'),
-          IconButton(
-              onPressed: (){
-                Navigator.pop(context);
-              },
-              icon: Icon(Icons.close)
-          )
-        ],
-      ),
-    );
   }
 }

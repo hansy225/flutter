@@ -4,18 +4,19 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/rendering.dart';
 
-
+/*
+  Navigator : 화면간의 이동을 관리하는 스택구조의 내비게이션 시스템
+  - Navigator.push(context, route) : 새로운 화면을 스택 위에 추가
+  - Navigator.pop(context) : 현재 화면을 스택에서 제거하고 이전화면이 보임
+  - Navigator.pushNamed(context, routeName) : 이름으로 등록된 경로로 이동
+  - Navigator.pushReplacement(context, route) : 현재 화면을 새 화면으로 교체
+  - Navigator.popUntil(context, predicate) : 특정 조건을 만족할 때까지 뒤로 감
+ */
 void main() {
   runApp(
       MaterialApp(
-        theme: theme,
-        initialRoute: '/',
-        routes: {
-          '/' : (context) => MyApp(),
-          '/upload' : (context) => Upload(),
-          '/detail' : (context) => Text('상세페이지')
-        },
-        //home: const MyApp()
+          theme: theme,
+          home: const MyApp()
       )
   );
 }
@@ -51,7 +52,7 @@ class _MyAppState extends State<MyApp> {
 
   addData(item) {
     setState(() {
-      feedItems.add(item);
+      feedItems.addAll(item);
     });
   }
 
@@ -63,7 +64,10 @@ class _MyAppState extends State<MyApp> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/upload');
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Upload())
+                );
               },
               icon: Icon(Icons.add_box_outlined)
           )

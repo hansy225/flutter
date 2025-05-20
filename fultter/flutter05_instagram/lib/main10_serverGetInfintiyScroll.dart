@@ -4,18 +4,11 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/rendering.dart';
 
-
 void main() {
   runApp(
       MaterialApp(
-        theme: theme,
-        initialRoute: '/',
-        routes: {
-          '/' : (context) => MyApp(),
-          '/upload' : (context) => Upload(),
-          '/detail' : (context) => Text('상세페이지')
-        },
-        //home: const MyApp()
+          theme: theme,
+          home: const MyApp()
       )
   );
 }
@@ -63,7 +56,6 @@ class _MyAppState extends State<MyApp> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/upload');
               },
               icon: Icon(Icons.add_box_outlined)
           )
@@ -150,27 +142,5 @@ class _HomeState extends State<Home> {
     } else {
       return Center(child: CircularProgressIndicator());
     }
-  }
-}
-
-class Upload extends StatelessWidget {
-  const Upload({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: [
-          Text('이미지 업로드 화면'),
-          IconButton(
-              onPressed: (){
-                Navigator.pop(context);
-              },
-              icon: Icon(Icons.close)
-          )
-        ],
-      ),
-    );
   }
 }
