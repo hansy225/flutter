@@ -9,13 +9,33 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
+/*
+    > 부모가 자식에게 넘겨줘야하는 값이 많다든지, 자식이 많아서 여러번에 걸쳐서 넘겨주기 귀찮음
+    * Provider : 전송없이 모든 위젯이 state를 가져다 쓸 수 있게 만든 패키지
+     - provider: ^6.1.5
+     - state를 보관하는 store가 필요함 : class로 만들어서 모든 state를 넣어줌
+ */
 
 void main() {
   runApp(
-      MaterialApp(
-        theme: theme,
-        home: const MyApp(),
+    /* store가 한개일 때
+      ChangeNotifierProvider(
+        create: (context) => Store1(),
+        child: MaterialApp(
+          theme: theme,
+          home: const MyApp(),
+        ),
       )
+     */
+    // store가 여러 개 일때
+    MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => Store1()),
+          ChangeNotifierProvider(create: (context) => Store2())
+        ]
+    )
   );
 }
 
@@ -195,19 +215,6 @@ class _HomeState extends State<Home> {
                           onTap: (){
                             Navigator.push(
                                 context,
-                                // MaterialPageRoute(builder: (context) => Profile())
-
-                                // CupertinoPageRoute(builder: (context) => Profile())   // 슬라이드
-
-                                /*  fadein
-                          PageRouteBuilder(
-                            // a1 : 0~1사이의 값 -> 새페이지 전환의 진행정도, a2 : 기존페이지 전환 진행정도
-                            pageBuilder: (context, a1, a2) =>
-                              FadeTransition(opacity: a1, child: Profile())
-                             ,transitionDuration: Duration(milliseconds: 1000),
-                          )
-                          */
-
                                 // slide애니메이션
                                 PageRouteBuilder(
                                     pageBuilder: (context, a1, a2) => Profile(),
@@ -238,14 +245,37 @@ class _HomeState extends State<Home> {
   }
 }
 
+// store 클래스 만들기
+class Store1 extends ChangeNotifier {
+  var name = 'john Lee';
+  
+  changeName(name2) {
+    name = name2;
+    notifyListeners(); // 재렌더링(set state가 아님)
+  }
+}
+
+class Store2 extends ChangeNotifier {
+  var content = '내용 바꿈';
+
+  changeName(content2) {
+    content = content2;
+    notifyListeners();
+  }
+}
+
 class Profile extends StatelessWidget {
   const Profile({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Text('profile page'),
+      appBar: AppBar(
+        title: Text(context.watch<Store1>().name),  // .watch() : state를 출력할 때 사용
+      ),
+      body: ElevatedButton(onPressed: (){
+        context.read<Store1>().changeName();  // .read() : 함수를 사용할 때
+      }, child: Text('이름 바꾸기')),
     );
   }
 }
