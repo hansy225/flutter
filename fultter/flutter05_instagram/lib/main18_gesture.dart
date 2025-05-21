@@ -10,6 +10,18 @@ import 'dart:io';
 
 import 'package:intl/intl.dart';
 
+/*
+  * 이름을 클릭하면 profile 창 띄우기
+    - GestureDetector() : 제스처를 감지할 수 있도록 도와주는 위젯
+              속성            |         설명
+      -------------------------------------------------
+      onTap                   |   한번 클릭 했을 때
+      onDoubleTap             |   더블클릭 했을 때
+      onLongPress             |   길게 눌렀을 때
+      onPanUpdate             |   드래그시 위치 변환 감지
+      onHorizontalDragStart   |   가로 드래그
+      onVerticalDragStart     |   세로 드래그
+ */
 void main() {
   runApp(
       MaterialApp(

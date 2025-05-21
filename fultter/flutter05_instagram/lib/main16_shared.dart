@@ -1,14 +1,17 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter05_instagram/style.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/rendering.dart';
-
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+/*
+  * 로컬 저장 공간
+    : shared preferences
+ */
 
 void main() {
   runApp(
@@ -31,6 +34,30 @@ class _MyAppState extends State<MyApp> {
   var feedItems = [];
   var userImage;
   var userContent;
+
+  saveData() async{
+    final storage = await SharedPreferences.getInstance();
+    storage.setString('name', 'Laura');
+    print('이름 = ${storage.get('name')}');
+
+    storage.setInt('num', 5);
+    print('num = ${storage.get('num')}');
+
+    storage.setStringList('list', ['list1', 'list2']);
+    print(storage.get('list'));
+    print(storage.getStringList('list')?[0]);
+
+    storage.remove('num');
+    print('num = ${storage.get('num')}');
+
+    var map = {'age' : 20};
+    storage.setString('map', jsonEncode(map));
+    var mapResult = storage.get('map');
+    print('map = $mapResult');
+
+    var result = storage.getString('map') ?? '비어있음';
+    print(jsonDecode(result)['age']);
+  }
 
   setUserContent(newContent) {
     setState(() {
@@ -58,6 +85,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    saveData();
     getData();
   }
 
@@ -89,6 +117,8 @@ class _MyAppState extends State<MyApp> {
               onPressed: () async{
                 var picker = ImagePicker();
                 var image = await picker.pickImage(source: ImageSource.gallery);
+                // ImageSource.camera  -> 카메라로 직접 찍음
+                // picker.pickMultiImage() -> 이미지 여러개 선택. 리스트로 들어옴
                 if(image != null) {
                   userImage = File(image.path);
                 }
@@ -190,41 +220,8 @@ class _HomeState extends State<Home> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('좋아요  ${widget.feedItems[i]['likes']}'),
-                        GestureDetector(
-                          child: Text('글쓴이  ${widget.feedItems[i]['user']}'),
-                          onTap: (){
-                            Navigator.push(
-                                context,
-                                // MaterialPageRoute(builder: (context) => Profile())
-
-                                // CupertinoPageRoute(builder: (context) => Profile())   // 슬라이드
-
-                                /*  fadein
-                          PageRouteBuilder(
-                            // a1 : 0~1사이의 값 -> 새페이지 전환의 진행정도, a2 : 기존페이지 전환 진행정도
-                            pageBuilder: (context, a1, a2) =>
-                              FadeTransition(opacity: a1, child: Profile())
-                             ,transitionDuration: Duration(milliseconds: 1000),
-                          )
-                          */
-
-                                // slide애니메이션
-                                PageRouteBuilder(
-                                    pageBuilder: (context, a1, a2) => Profile(),
-                                    transitionsBuilder: (context, a1, a2, child) =>
-                                        SlideTransition(
-                                          position: Tween(
-                                              begin: Offset(0.0, 1.0),
-                                              end: Offset(0.0, 0.0)
-                                          ).animate(a1),
-                                          child: child,
-                                        )
-                                )
-                            );
-                          } ,
-                        ),
-                        Text('내용  ${widget.feedItems[i]['content']}'),
-                        Text('날짜  ${widget.feedItems[i]['date']}')
+                        Text('글쓴이  ${widget.feedItems[i]['user']}'),
+                        Text('내용  ${widget.feedItems[i]['content']}')
                       ],
                     )
                 ),
@@ -237,19 +234,6 @@ class _HomeState extends State<Home> {
     }
   }
 }
-
-class Profile extends StatelessWidget {
-  const Profile({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Text('profile page'),
-    );
-  }
-}
-
 
 class Upload extends StatelessWidget {
   const Upload({super.key, this.userImage, this.setUserContent, this.addMyData});
